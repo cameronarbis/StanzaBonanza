@@ -1,0 +1,130 @@
+/* ---- tokens: the midnight library ---- */
+:root {
+  --ink-0: #0e1220;      /* page — deep ink slate */
+  --ink-1: #161b2e;      /* pane surface */
+  --ink-2: #1f2540;      /* raised / inset field */
+  --hair: #2c3355;       /* hairline borders */
+  --parchment: #e8e3d5;  /* primary text — old paper */
+  --parchment-dim: #9b97a8;
+  --ember: #e6a15c;      /* accent — candlelight amber */
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ink-0);
+  color: var(--parchment);
+  font-family: var(--mono);
+  font-size: 14px;
+}
+
+.page { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+.masthead h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2.4rem;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+.tagline { color: var(--parchment-dim); margin: 0.25rem 0 2rem; font-size: 13px; }
+
+/* ---- two panes ---- */
+.panes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 760px) { .panes { grid-template-columns: 1fr; } }
+
+.pane {
+  background: var(--ink-1);
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pane-label { color: var(--parchment-dim); font-size: 12px; margin: 0 0 0.75rem; }
+
+/* ---- output pane ---- */
+.poem {
+  flex: 1;
+  min-height: 340px;
+  background: var(--ink-2);
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+}
+.poem-empty { color: var(--parchment-dim); font-style: italic; font-family: var(--serif); font-size: 1.1rem; }
+
+.poem-line {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  line-height: 1.5;
+  margin: 0;
+  animation: settle 400ms ease-out;
+}
+.poem-attr {
+  color: var(--parchment-dim);
+  font-size: 11px;
+  margin: 0.1rem 0 0.9rem;
+}
+@keyframes settle {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .poem-line { animation: none; } }
+
+.controls { display: flex; gap: 0.6rem; margin-top: 1rem; }
+
+.btn {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--parchment);
+  background: transparent;
+  border: 1px solid var(--hair);
+  border-radius: 6px;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.btn:hover { background: var(--ink-2); border-color: var(--ember); }
+.btn:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+.btn-primary { background: var(--ember); border-color: var(--ember); color: var(--ink-0); font-weight: 500; }
+.btn-primary:hover { background: #f0b273; }
+.btn-ghost { opacity: 0.45; cursor: not-allowed; margin-left: auto; }
+
+/* ---- mood pane: the constellation ---- */
+#mood-graph { width: 100%; height: auto; }
+
+.axis { stroke: var(--hair); stroke-width: 1; stroke-dasharray: 3 4; }
+.axis-label { fill: var(--parchment-dim); font-family: var(--mono); font-size: 10px; }
+
+.edge { stroke: var(--parchment-dim); }
+
+.star { cursor: pointer; }
+.star circle { transition: r 150ms ease; }
+.star .halo { fill: none; }
+.star text {
+  fill: var(--parchment-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-anchor: middle;
+  pointer-events: none;
+}
+.star:hover text { fill: var(--parchment); }
+
+.centroid { fill: var(--ember); }
+.centroid-ring { fill: none; stroke: var(--ember); stroke-width: 1; opacity: 0.5; }
+
+.tau-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 1rem; }
+.tau-row label, .tau-row output { font-size: 12px; color: var(--parchment-dim); }
+.tau-row input[type="range"] { flex: 1; accent-color: var(--ember); }
+.tau-hint { color: var(--parchment-dim); font-size: 11px; margin: 0.4rem 0 0; }

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verse Lottery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <h1>Verse lottery</h1>
+      <p class="tagline">every line a different voice, drawn by mood</p>
+    </header>
+
+    <section class="panes">
+      <!-- Left: output -->
+      <div class="pane pane-output">
+        <div id="poem" class="poem" aria-live="polite">
+          <p class="poem-empty">Sculpt a mood, then draw a line.</p>
+        </div>
+        <div class="controls">
+          <button id="btn-draw" class="btn btn-primary">Draw a line</button>
+          <button id="btn-clear" class="btn">Clear</button>
+          <button id="btn-remix" class="btn btn-ghost" disabled title="Coming in v2">Remix · v2</button>
+        </div>
+      </div>
+
+      <!-- Right: mood constellation -->
+      <div class="pane pane-mood">
+        <p class="pane-label">mood · valence &times; arousal &mdash; click a star to weight it</p>
+        <svg id="mood-graph" viewBox="0 0 400 340" role="img" aria-label="Mood graph: emotion nodes on a valence-arousal plane"></svg>
+        <div class="tau-row">
+          <label for="tau">temperament &tau;</label>
+          <input type="range" id="tau" min="0.02" max="0.60" step="0.01" value="0.12" />
+          <output id="tau-out" for="tau">0.12</output>
+        </div>
+        <p class="tau-hint">low &tau; = faithful to the mood &middot; high &tau; = wild lottery</p>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

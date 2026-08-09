@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "note": "Hand-scored starter corpus of public-domain lines. Replace by running pipeline/build_corpus.py. Fields: t=text, a=author, p=poem, v=valence [0,1], r=arousal [0,1].",
+    "version": "sample-0.1"
+  },
+  "lines": [
+    { "t": "Because I could not stop for Death —", "a": "Emily Dickinson", "p": "Because I could not stop for Death", "v": 0.30, "r": 0.35 },
+    { "t": "Hope is the thing with feathers", "a": "Emily Dickinson", "p": "Hope is the thing with feathers", "v": 0.82, "r": 0.45 },
+    { "t": "I celebrate myself, and sing myself,", "a": "Walt Whitman", "p": "Song of Myself", "v": 0.88, "r": 0.72 },
+    { "t": "O Captain! my Captain! our fearful trip is done,", "a": "Walt Whitman", "p": "O Captain! My Captain!", "v": 0.35, "r": 0.80 },
+    { "t": "Tyger Tyger, burning bright,", "a": "William Blake", "p": "The Tyger", "v": 0.45, "r": 0.90 },
+    { "t": "To see a World in a Grain of Sand", "a": "William Blake", "p": "Auguries of Innocence", "v": 0.75, "r": 0.55 },
+    { "t": "Once upon a midnight dreary, while I pondered, weak and weary,", "a": "Edgar Allan Poe", "p": "The Raven", "v": 0.15, "r": 0.50 },
+    { "t": "And the silken, sad, uncertain rustling of each purple curtain", "a": "Edgar Allan Poe", "p": "The Raven", "v": 0.22, "r": 0.42 },
+    { "t": "I wandered lonely as a cloud", "a": "William Wordsworth", "p": "I Wandered Lonely as a Cloud", "v": 0.55, "r": 0.25 },
+    { "t": "The world is too much with us; late and soon,", "a": "William Wordsworth", "p": "The World Is Too Much with Us", "v": 0.25, "r": 0.55 },
+    { "t": "Look on my Works, ye Mighty, and despair!", "a": "Percy Bysshe Shelley", "p": "Ozymandias", "v": 0.18, "r": 0.85 },
+    { "t": "O wild West Wind, thou breath of Autumn's being,", "a": "Percy Bysshe Shelley", "p": "Ode to the West Wind", "v": 0.50, "r": 0.78 },
+    { "t": "A thing of beauty is a joy for ever:", "a": "John Keats", "p": "Endymion", "v": 0.92, "r": 0.40 },
+    { "t": "Season of mists and mellow fruitfulness,", "a": "John Keats", "p": "To Autumn", "v": 0.72, "r": 0.20 },
+    { "t": "She walks in beauty, like the night", "a": "Lord Byron", "p": "She Walks in Beauty", "v": 0.80, "r": 0.35 },
+    { "t": "Water, water, every where, nor any drop to drink.", "a": "Samuel Taylor Coleridge", "p": "The Rime of the Ancient Mariner", "v": 0.15, "r": 0.60 },
+    { "t": "In Xanadu did Kubla Khan a stately pleasure-dome decree:", "a": "Samuel Taylor Coleridge", "p": "Kubla Khan", "v": 0.68, "r": 0.65 },
+    { "t": "Does the road wind up-hill all the way? Yes, to the very end.", "a": "Christina Rossetti", "p": "Up-Hill", "v": 0.28, "r": 0.38 },
+    { "t": "Ring out, wild bells, to the wild sky,", "a": "Alfred, Lord Tennyson", "p": "In Memoriam", "v": 0.65, "r": 0.85 },
+    { "t": "The world is charged with the grandeur of God.", "a": "Gerard Manley Hopkins", "p": "God's Grandeur", "v": 0.85, "r": 0.80 },
+    { "t": "Loveliest of trees, the cherry now is hung with bloom along the bough,", "a": "A. E. Housman", "p": "A Shropshire Lad II", "v": 0.85, "r": 0.30 },
+    { "t": "The tide rises, the tide falls,", "a": "Henry Wadsworth Longfellow", "p": "The Tide Rises, the Tide Falls", "v": 0.45, "r": 0.15 },
+    { "t": "I am the master of my fate, I am the captain of my soul.", "a": "William Ernest Henley", "p": "Invictus", "v": 0.78, "r": 0.82 },
+    { "t": "Gather ye rosebuds while ye may,", "a": "Robert Herrick", "p": "To the Virgins, to Make Much of Time", "v": 0.75, "r": 0.60 },
+    { "t": "Death, be not proud, though some have called thee", "a": "John Donne", "p": "Holy Sonnet X", "v": 0.40, "r": 0.70 },
+    { "t": "But at my back I always hear Time's wingèd chariot hurrying near;", "a": "Andrew Marvell", "p": "To His Coy Mistress", "v": 0.30, "r": 0.75 }
+  ]
+}
