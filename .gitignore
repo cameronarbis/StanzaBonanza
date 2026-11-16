@@ -4,3 +4,4 @@ pipeline/NRC-VAD-Lexicon.txt
 __pycache__/
 
 .DS_Store
+pipeline/NRC-VAD-Lexicon-v2.1/
