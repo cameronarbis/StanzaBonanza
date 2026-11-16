@@ -207,7 +207,10 @@ materializes the corpus in application memory, and it keeps Postgres as
 the single source of truth. For n lines, the server runs n draws in one
 transaction, appending each drawn author to the exclusion set — the
 lottery rule. If the pool empties mid-poem (small corpus, long poem), the
-exclusion set resets, mirroring today's client behavior.
+exclusion set resets to the request's explicit `exclude` list — authors
+drawn during this poem become eligible again, but the caller's own
+exclusions are a contract and are never overridden. If nothing is
+drawable even then, the poem comes back shorter than `n`, honestly.
 
 ### 5.4 Exact recall without storage
 

@@ -5,3 +5,6 @@ __pycache__/
 
 .DS_Store
 pipeline/NRC-VAD-Lexicon-v2.1/
+.venv/
+.env
+.pytest_cache/
