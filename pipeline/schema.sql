@@ -1,5 +1,6 @@
 -- StanzaBonanza corpus schema. Ingestion owns DDL; the server only reads.
--- See docs/DESIGN.md §4.
+-- See docs/DESIGN.md section 4. (ASCII only here: this file is executed
+-- verbatim and must survive any client_encoding.)
 
 CREATE TABLE IF NOT EXISTS authors (
   id   SERIAL PRIMARY KEY,

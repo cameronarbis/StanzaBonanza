@@ -43,7 +43,8 @@ def pg(tmp_path_factory):
     sockdir = tempfile.mkdtemp(prefix="sbpg", dir="/tmp")
     log = datadir / "pg.log"
     subprocess.run(
-        ["initdb", "-D", str(datadir), "-U", "stanza", "-A", "trust", "--no-sync"],
+        ["initdb", "-D", str(datadir), "-U", "stanza", "-A", "trust", "--no-sync",
+         "-E", "UTF8", "--locale=C"],  # corpus text is UTF-8; don't inherit locale
         check=True, capture_output=True,
     )
     subprocess.run(
