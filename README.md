@@ -1,65 +1,108 @@
-# Verse Lottery
+# StanzaBonanza (Verse Lottery)
 
-A single-page poetry generator. Every line is drawn from a different poet,
-sampled by emotional proximity to a mood you sculpt on an interactive
-valence–arousal graph. No server, no LLM — a static corpus and a softmax.
+A poetry generator. Every line is drawn from a different poet, sampled
+by emotional proximity to a mood you sculpt on an interactive
+valence–arousal graph. v1 is a client/server system: a Python ingestion
+pipeline, Postgres, and a FastAPI sampling API serving a static
+frontend. Full design: [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Architecture
 
 ```
-pipeline/build_corpus.py   (runs once, Python)
-  PoetryDB → split lines → NRC-VAD scoring → public/corpus.json
+pipeline/ingest.py   (manual, Python)
+  PoetryDB → split lines → NRC-VAD scoring → Postgres
 
-src/  (runs in the browser)
+server/  (FastAPI)
+  GET /api/poem    softmax sampling in SQL, one author per line,
+                   JSON or text/plain via content negotiation
+  GET /api/corpus  corpus counts + version
+  GET /api/health  liveness + db check
+
+src/  (browser)
   moodgraph.js  emotion nodes → weighted centroid → target vector (v, a)
-  sampler.js    P(line) ∝ exp(−‖line − target‖ / τ), authors w/o replacement
-  main.js       state + event wiring + DOM rendering
+  main.js       UI state + API calls + recall recipes
 ```
 
 Key ideas you will touch while working on this:
 
-- **Precompute vs runtime**: all NLP happens in the build step; the client
-  only does arithmetic over a static JSON.
 - **Russell's circumplex**: emotions as points in valence × arousal space.
-- **Softmax temperature**: the τ slider is literally the same knob as LLM
-  sampling temperature — low τ = greedy/coherent, high τ = uniform/chaotic.
-- **Stratified sampling without replacement**: the "lottery" rule — each
-  draw excludes authors already used in the current poem.
+- **Softmax temperature**: the τ slider is the same knob as LLM sampling
+  temperature — low τ = greedy/coherent, high τ = uniform/chaotic. The
+  draw happens in SQL via the Gumbel-max trick.
+- **The lottery rule**: authors already used are excluded per poem —
+  stratified sampling without replacement, enforced server-side.
+- **Recall without storage**: every poem is a pure function of
+  (corpus version, mood params, seed); the JSON download is a recipe
+  that regenerates it exactly.
 
-## Run it
+## Run it locally
+
+You need Postgres, Python 3.12+, and Node.
 
 ```bash
-npm install
-npm run dev        # Vite dev server, uses the bundled sample corpus
-```
+# 1. database
+createdb stanzabonanza
 
-The repo ships with `public/corpus.json` containing ~24 hand-scored
-public-domain lines so the app works immediately.
+# 2. server
+cd server
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+export DATABASE_URL=postgresql://localhost/stanzabonanza
+
+# 3. corpus — bundled 26-line sample, no network needed
+.venv/bin/python ../pipeline/ingest.py --sample
+
+# 4. API
+.venv/bin/uvicorn app.main:app --port 8000
+
+# 5. frontend (second terminal; Vite proxies /api to :8000)
+npm install
+npm run dev
+```
 
 ## Build the real corpus
 
-1. Download the NRC-VAD lexicon (free for non-commercial use) from
+1. Download the NRC-VAD lexicon v2.1 (free for non-commercial use) from
    Saif Mohammad's site: https://saifmohammad.com/WebPages/nrc-vad.html
-2. Place the lexicon text file at `pipeline/NRC-VAD-Lexicon.txt`
-   (tab-separated: `word  valence  arousal  dominance`).
-3. Run:
+   and unpack it at `pipeline/NRC-VAD-Lexicon-v2.1/`. It is deliberately
+   not committed — its terms direct users to the source.
+2. Run:
 
 ```bash
 cd pipeline
 pip install -r requirements.txt
-python build_corpus.py --max-authors 40 --out ../public/corpus.json
+DATABASE_URL=postgresql://... python ingest.py --max-authors 40
 ```
 
-## Deploy
+The script is polite to PoetryDB (rate-limited, run manually) and
+idempotent — re-running converges instead of duplicating.
 
-Push to GitHub, import the repo in Vercel. Framework preset: **Vite**.
-Build command `npm run build`, output directory `dist`. Nothing else —
-it is a fully static site.
+## Tests
+
+```bash
+cd server
+.venv/bin/pip install pytest httpx requests
+.venv/bin/python -m pytest tests/
+```
+
+Tests spin up a throwaway real Postgres cluster (`initdb` must be on
+PATH) and never call PoetryDB.
+
+## Deploy (Railway)
+
+One service plus a Postgres plugin:
+
+- Build: `npm install && npm run build` (FastAPI serves `dist/`),
+  then `pip install -r server/requirements.txt`.
+- Start: `cd server && uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- Health check path: `/api/health`.
+- Env: `DATABASE_URL` (injected by the plugin; the app uses the private
+  URL), `ALLOWED_ORIGINS` empty in production.
+- Ingest from your machine via the database's **public TCP proxy** URL.
 
 ## Roadmap
 
-- **v1**: curated retrieval (this scaffold).
-- **v2**: "Remix" button — per-mood-quadrant Markov chains built by the
-  pipeline (`--markov` flag reserved), generating novel lines client-side.
-- **v3 (maybe)**: serverless `/api/generate` calling an LLM, conditioned
-  on the same (v, a, τ) triple.
+- **v1**: curated retrieval behind an API you operate (this).
+- **v2**: "Remix" — per-mood-quadrant Markov chains built by the
+  pipeline, generating novel lines.
+- **v3 (maybe)**: `/api/generate` calling an LLM, conditioned on the
+  same (v, a, τ) triple.
